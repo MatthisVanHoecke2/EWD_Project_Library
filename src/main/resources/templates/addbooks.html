@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script type="text/javascript" th:src="@{/js/addbooks.js}"></script>
+<meta charset="ISO-8859-1">
+<title>Books</title>
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+	<h3>Add book!</h3>
+	<form th:action="@{/books/add}" th:object="${book}" method="post" id="bookForm">
+		<table>
+			<tr>
+				<td>
+					<label>Name </label>
+				</td>
+				<td>
+					<input type="text" th:field="*{name}" placeholder="Book name"/><br>
+					<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="errorMessage"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>ISBN</label>
+				</td>
+				<td>
+					<input type="text" th:field="*{isbn}" placeholder="e.g. 1234567890128"/><br>
+					<span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" th:errorclass="errorMessage"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Purchase price</label>
+				</td>
+				<td>
+					<input type="text" th:field="*{price}"/><br>
+					<span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorclass="errorMessage"></span>
+				</td>
+			</tr>
+			<tr th:each="author, itemStat: *{authorList}">
+				<td>
+					<label th:if="${itemStat.first}">Authors</label>
+				</td>
+				<td>
+					<input type="text" placeholder="First name" th:field="*{authorList[__${itemStat.index}__].firstName}" th:id="'firstName_' + ${itemStat.index}"/><br>
+					<span th:if="${#fields.hasErrors('authorList[' + itemStat.index + '].firstName')}" th:errors="*{authorList[__${itemStat.index}__].firstName}" th:errorclass="errorMessage"></span>
+				</td>
+				<td>
+					<input type="text" placeholder="Last name" th:field="*{authorList[__${itemStat.index}__].lastName}" th:id="'lastName_' + ${itemStat.index}"/><br>
+					<span th:if="${#fields.hasErrors('authorList[' + itemStat.index + '].lastName')}" th:errors="*{authorList[__${itemStat.index}__].lastName}" th:errorclass="errorMessage"></span>
+				</td>
+				<td>
+					<button type="button" th:if="${!itemStat.last || (itemStat.last && itemStat.index == 2)}" th:onclick="'removeAuthor(' + ${itemStat.index} + ');'">X</button>
+					<button type="button" th:if="${itemStat.last && #lists.size(book.authorList) < 3}" onclick="addAuthor()">Add author</button>
+				</td>
+			</tr>
+			<tr th:each="location, itemStat: *{locationList}">
+				<td>
+					<label th:if="${itemStat.first}">Locations</label>
+				</td>
+				<td>
+					<input type="text" placeholder="Name" th:field="*{locationList[__${itemStat.index}__].name}"/><br>
+					<span th:if="${#fields.hasErrors('locationList[' + itemStat.index + '].name')}" th:errors="*{locationList[__${itemStat.index}__].name}" th:errorclass="errorMessage"></span>
+				</td>
+				<td>
+					<input type="text" placeholder="Place code 1" th:field="*{locationList[__${itemStat.index}__].placecode1}" /><br>
+					<span th:if="${#fields.hasErrors('locationList[' + itemStat.index + '].placecode1')}" th:errors="*{locationList[__${itemStat.index}__].placecode1}" th:errorclass="errorMessage"></span>
+				</td>
+				<td>
+					<input type="text" placeholder="Place code 2" th:field="*{locationList[__${itemStat.index}__].placecode2}"/><br>
+					<span th:if="${#fields.hasErrors('locationList[' + itemStat.index + '].placecode2')}" th:errors="*{locationList[__${itemStat.index}__].placecode2}" th:errorclass="errorMessage"></span>
+				</td>
+				<td>
+					<button type="button" th:if="${!itemStat.last || (itemStat.last && itemStat.index == 2)}" th:onclick="'removeLocation(' + ${itemStat.index} + ');'">X</button>
+					<button type="button" th:if="${itemStat.last && #lists.size(book.locationList) < 3}" onclick="addLocation()">Add location</button>
+				</td>
+				<td>
+					<span th:if="${#fields.hasErrors('locationList[' + itemStat.index + ']')}" th:errors="*{locationList[__${itemStat.index}__]}" th:errorclass="errorMessage"></span>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<button type="button" onclick="saveBook()">Submit</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

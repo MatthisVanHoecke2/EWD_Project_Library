@@ -1,0 +1,77 @@
+#authorList {
+	padding-left: 1em;
+}
+
+.booklist {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 5vw;
+}
+
+.listItem {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  border: 1px solid gray;
+  padding: 1em;
+  width: 12em;
+  gap: 0.5em;
+}
+
+td {
+	vertical-align: top;
+}
+
+.booklist td {
+	padding-right: 5px;
+}
+
+.bookdetails td {
+	height: 15px;
+	padding-right: 20px;
+	padding-bottom: 0.3em;
+}
+.bookdetails table, .booklist table {
+	border-collapse: collapse;
+}
+	
+.bookdetails .innerTable td{
+	height: 15px;
+	padding-bottom: 3px;
+}
+
+.errorMessage {
+	color: red;
+}
+
+.loginForm {
+	display: flex;
+	justify-content: center;
+}
+
+.loginForm .submitButton {
+	width: 100%;
+}
+
+.loginForm .message {
+	padding: 10px;
+	font-weight: bold;
+}
+
+.loginForm .info {
+	color: #2c8cc7;
+	background-color: #c3d5fa;
+}
+
+.loginForm .error {
+	color: #c72c2c;
+	background-color: #ffbdbd;
+}
+
+.d-flex {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+}
