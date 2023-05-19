@@ -15,7 +15,7 @@ import jakarta.validation.Payload;
 @Target({METHOD, FIELD, TYPE_USE})
 @Retention(RUNTIME)
 public @interface ValidLocation {
-	String message() default "difference between placecodes must be at least 50";
+	String message() default "{location.difference.message}";
 	
 	Class<?>[] groups() default{};
 	

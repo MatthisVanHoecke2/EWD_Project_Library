@@ -2,32 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Books</title>
+<title th:text="#{library.title}"></title>
 <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body onload="document.loginForm.username.focus();">
 	<div class="loginForm">
 		<div>
-			<h3>Login</h3>
+			<h3 th:text="#{login.title}"></h3>
 			<p class="message error" th:if="${error}" th:text="${error}"></p>
 			<p class="message info" th:if="${msg}" th:text="${msg}"></p>
 			<form th:action="@{/login}" name="loginForm" method="post">
 				<table>
 					<tr>
-						<td>User:</td>
+						<td th:text="#{login.user}"></td>
 						<td>
 							<input type="text" name="username"/><br>
 						</td>
 					</tr>
 					<tr>
-						<td>Password:</td>
+						<td th:text="#{login.password}"></td>
 						<td>
 							<input type='password' name='password' />
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<button name="submit" type="submit" class="submitButton">Login</button>
+							<button name="submit" type="submit" class="submitButton" th:text="#{login.button}"></button>
 						</td>
 					</tr>
 				</table>

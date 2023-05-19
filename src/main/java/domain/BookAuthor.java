@@ -1,5 +1,7 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -21,10 +23,12 @@ public class BookAuthor {
 		this.author = author;
 	}
 	
+	@JsonIgnore
 	@Id
 	@ManyToOne
 	private Book book;
 	
+	@JsonIgnore
 	@Id
 	@ManyToOne
 	private Author author;

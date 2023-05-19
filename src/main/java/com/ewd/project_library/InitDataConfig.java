@@ -55,8 +55,8 @@ public class InitDataConfig implements CommandLineRunner{
 		userRepo.save(userD);
 		userRepo.save(admin);
 		
-		Book bookA = new Book("hi", "h53hssef4", 15.00), 
-				bookB = new Book("hello", "h53hssefdd4", 17.00);
+		Book bookA = new Book("hi", "1234567890128", 15.00), 
+				bookB = new Book("hello", "1214567890120", 17.00);
 		bookRepo.save(bookA);
 		bookRepo.save(bookB);
 		
@@ -82,10 +82,11 @@ public class InitDataConfig implements CommandLineRunner{
 		bookAuthorRepo.save(new BookAuthor(bookA, authorC));
 		bookAuthorRepo.save(new BookAuthor(bookB, authorD));
 		bookAuthorRepo.save(new BookAuthor(bookB, authorE));
+		bookAuthorRepo.save(new BookAuthor(bookB, authorA));
 		
-		locationRepo.save(new Location(bookA, 555, 565, "LibraryA"));
-		locationRepo.save(new Location(bookB, 545, 595, "LibraryB"));
-		locationRepo.save(new Location(bookA, 525, 515, "LibraryC"));
+		locationRepo.save(new Location(bookA, 50, 100, "LibraryA"));
+		locationRepo.save(new Location(bookB, 100, 150, "LibraryB"));
+		locationRepo.save(new Location(bookA, 150, 200, "LibraryC"));
 	}
 
 }

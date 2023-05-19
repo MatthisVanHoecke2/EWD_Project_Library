@@ -9,13 +9,13 @@ import lombok.Setter;
 @Setter
 public class Location {
 	
-	@NotEmpty
-	@Pattern(regexp = "^[a-zA-Z]+", message = "can only contain letters")
+	@NotEmpty(message = "{field.empty.message}")
+	@Pattern(regexp = "^[a-zA-Z]+", message = "{field.onlyLetters.message}")
 	private String name;
 	
-	@NotEmpty
+	@NotEmpty(message = "{field.empty.message}")
 	private String placecode1;
 	
-	@NotEmpty
+	@NotEmpty(message = "{field.empty.message}")
 	private String placecode2;
 }

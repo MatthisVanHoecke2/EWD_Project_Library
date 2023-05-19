@@ -1,5 +1,6 @@
 package com.ewd.project_library;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,11 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import domain.Author;
 import domain.Book;
-import jakarta.servlet.http.HttpServletRequest;
+import domain.BookAuthor;
+import domain.User;
+import domain.UserBook;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import repository.AuthorRepository;
+import repository.BookAuthorRepository;
 import repository.BookRepository;
+import repository.LocationRepository;
 import repository.UserBookRepository;
+import repository.UserRepository;
 import validator.BookValidation;
 
 @Slf4j
@@ -28,7 +35,19 @@ import validator.BookValidation;
 @RequestMapping("/books")
 public class BookController {
 	@Autowired
+	private AuthorRepository authorRepo;
+	
+	@Autowired
+	private BookAuthorRepository bookAuthorRepo;
+	
+	@Autowired
+	private LocationRepository locationRepo;
+	
+	@Autowired
 	private BookRepository bookRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	@Autowired
 	private UserBookRepository userBookRepo;
@@ -37,28 +56,47 @@ public class BookController {
 	private BookValidation bookValidation;
 	
 	@GetMapping
-	public String listBooks(Model model, HttpServletRequest request) {
+	public String listBooks(Model model, Principal principal) {
 		log.info("get books");
 		
-		model.addAttribute("bookList", bookRepo.findAll());
+		User user = userRepo.findByName(principal.getName());
 		
-		boolean isAdmin = false;
-		if(request.isUserInRole("ADMIN")) isAdmin = true;
-		model.addAttribute("isAdmin", isAdmin);
+		model.addAttribute("bookList", bookRepo.findAll());
+		model.addAttribute("favoriteList", user.getUserBooks().stream()
+				.filter(el -> el.isFavorite())
+				.map(el -> el.getBook().getId())
+				.collect(Collectors.toList()));
+		model.addAttribute("isAdmin", user.isAdmin());
 		
 		return "books";
 	}
 	
 	@PostMapping
-	public String onSubmit(@RequestParam(name = "id") String id, @RequestParam(name = "action") String action, Model model) {
+	public String onSubmit(@RequestParam(name = "id") String id, @RequestParam(name = "action") String action, Model model, Principal principal) {
+		long bookId = Long.parseLong(id);
+		User user = userRepo.findByName(principal.getName());
+		List<UserBook> userBooks = user.getUserBooks();
+		Book book = bookRepo.findById(bookId).orElse(null);
+		
+		if(book == null) return "redirect:/books";
 		switch(action.toLowerCase()) {
-		case "add" -> log.info("post add book id=" + id + " to favorites");
-		case "remove" -> log.info("post remove book id=" + id + " from favorites");
+		case "add" -> {
+			log.info("post add book id=" + id + " to favorites");
+			
+			UserBook ub = userBooks.stream().filter(el -> el.getBook().getId() == bookId).findAny().orElse(new UserBook(user, book, true));
+			ub.setFavorite(true);
+			userBookRepo.save(ub);
+		}
+		case "remove" -> {
+			log.info("post remove book id=" + id + " from favorites");
+			
+			UserBook ub = userBooks.stream().filter(el -> el.getBook().getId() == bookId).findAny().orElse(new UserBook(user, book, false));
+			ub.setFavorite(false);
+			userBookRepo.save(ub);
+		}
 		}
 		
-		model.addAttribute("bookList", bookRepo.findAll());
-		
-		return "books";
+		return "redirect:/books";
 	}
 	
 	
@@ -139,7 +177,37 @@ public class BookController {
 		bookValidation.validate(book, result);
 		if(result.hasErrors()) return "addbooks";
 		
+		saveBook(book);
 		
 		return "redirect:/books";
+	}
+	
+	private void saveBook(com.ewd.project_library.Book book) {
+		double price = book.getPrice().isEmpty() ? 0 : Double.parseDouble(book.getPrice());
+		Book nBook = new Book(book.getName(), book.getIsbn(), price);
+		
+		List<BookAuthor> bookAuthors = new ArrayList<>();
+		for(com.ewd.project_library.Author auth : book.getAuthorList()) {
+			String firstName = auth.getFirstName(), lastName = auth.getLastName();
+			Author author = authorRepo.findByFirstNameAndLastName(firstName, lastName).orElse(new Author(firstName, lastName));
+			authorRepo.save(author);
+			
+			bookAuthors.add(new BookAuthor(nBook, author));
+		}
+		
+		List<domain.Location> locations = new ArrayList<>();
+		for(com.ewd.project_library.Location loc : book.getLocationList()) {
+			domain.Location location = new domain.Location(nBook, Integer.parseInt(loc.getPlacecode1()), Integer.parseInt(loc.getPlacecode2()), loc.getName());
+			locations.add(location);
+		}
+		
+		bookRepo.save(nBook);
+		
+		locations.forEach(el -> locationRepo.save(el));
+		bookAuthors.forEach(el -> bookAuthorRepo.save(el));
+		
+		nBook.setBookAuthors(bookAuthors);
+		nBook.setLocations(locations);
+		bookRepo.save(nBook);
 	}
 }

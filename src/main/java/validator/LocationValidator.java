@@ -1,5 +1,11 @@
 package validator;
 
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import com.ewd.project_library.Location;
 
 import jakarta.validation.ConstraintValidator;
@@ -7,6 +13,9 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class LocationValidator implements ConstraintValidator<ValidLocation, Location>{
 
+	@Autowired
+	private MessageSource messageSource;
+	
 	@Override
 	public void initialize(ValidLocation constraintAnnotation) {
 	}
@@ -40,7 +49,8 @@ public class LocationValidator implements ConstraintValidator<ValidLocation, Loc
 		try {
 			int code = Integer.parseInt(value);
 			if(code < 50 || code > 300) {
-				context.buildConstraintViolationWithTemplate("must be between 49 and 301")
+				Locale locale = LocaleContextHolder.getLocale();
+				context.buildConstraintViolationWithTemplate(messageSource.getMessage("location.codes.inRange.message", new Object[]{}, locale))
 					.addPropertyNode(placecode)
 					.addConstraintViolation();
 				return false;

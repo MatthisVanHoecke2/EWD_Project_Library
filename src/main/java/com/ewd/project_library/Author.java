@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Author {
-	@NotEmpty
+	@NotEmpty(message = "{field.empty.message}")
 	private String firstName;
-	@NotEmpty
+	@NotEmpty(message = "{field.empty.message}")
 	private String lastName;
 }

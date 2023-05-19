@@ -2,18 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Books</title>
+<title th:text="#{library.title}"></title>
 <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body class="bookdetails">
-	<h3>Book Details!</h3>
+	<h3 th:text="#{details.title}"></h3>
 	<table>
 		<tr>
-			<td><b>Name</b></td>
+			<td><b th:text="#{details.name}"></b></td>
 			<td th:text="${bookDetails.name}"></td>
 		</tr>
 		<tr>
-			<td><b>Authors</b></td>
+			<td><b th:text="#{details.authors}"></b></td>
 			<td>
 				<div style="display: inline;">
 					<span 
@@ -25,31 +25,31 @@
 			</td>
 		</tr>
 		<tr>
-			<td><b>ISBN</b></td>
+			<td><b th:text="#{details.isbn}"></b></td>
 			<td th:text="${bookDetails.isbn}"></td>
 		</tr>
 		<tr>
-			<td><b>Purchase Price</b></td>
+			<td><b th:text="#{details.price}"></b></td>
 			<td th:text="'$' + ${bookDetails.purchasePrice}"></td>
 		</tr>
 		<tr>
-			<td><b>Stars</b></td>
+			<td><b th:text="#{details.stars}"></b></td>
 			<td th:text="${rating}"></td>
 		</tr>
 		<tr th:each="location,iter:${bookDetails.locations}">
-			<td><i><b th:text="'Location ' + (${iter.index}+1)"></b></i></td>
+			<td><i><b th:text="#{details.location} + ' ' + (${iter.index}+1)"></b></i></td>
 			<td>
 				<table class="innerTable">
 					<tr>
-						<td><i>Name</i></td>
+						<td><i th:text="#{details.location.name}"></i></td>
 						<td th:text="${location.name}"></td>
 					</tr>
 					<tr>
-						<td><i>Placecode 1</i></td>
+						<td><i th:text="#{details.location.placecode1}"></i></td>
 						<td th:text="${location.placecode1}"></td>
 					</tr>
 					<tr>
-						<td><i>Placecode 2</i></td>
+						<td><i th:text="#{details.location.placecode2}"></i></td>
 						<td th:text="${location.placecode2}"></td>
 					</tr>
 				</table>

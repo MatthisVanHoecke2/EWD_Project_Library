@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Books</title>
+<title th:text="#{library.title}"></title>
 <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
-	<h1>HTTP Status 403 - Access is denied</h1>
+	<h1 th:text="#{403.title}"></h1>
 	
 	<form th:action="@{/logout}" method="post">
-		<input type="submit" value="Logout" />
+		<input type="submit" th:value="#{logout.button}" />
 		
 		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 	</form>

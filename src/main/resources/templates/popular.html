@@ -2,25 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Pupular</title>
+<title th:text="#{library.title}"></title>
 <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
-	<h3>Pupular Books!</h3>
+	<h3 th:text="#{popular.title}"></h3>
 	<div class="booklist">
 		<div th:each="book,iter:${bookList}" class="listItem">
 			<div th:text="${book.name}"></div>
-			<div style="display: inline;">
-				<span>By: </span>
-				<span 
-					th:each="bookAuthor,iter:${book.authors}" 
-					th:text="${bookAuthor.firstName} + ' ' + ${bookAuthor.lastName} + ${iter.last ? '' : ', '}"
-				>
-				</span>
+			<div>
+				<table>
+					<tr>
+						<td>
+							<span th:text="#{books.book.by} + ':'"></span>
+						</td>
+						<td>
+							<span 
+								th:each="bookAuthor,iter:${book.authors}" 
+								th:text="${bookAuthor.firstName} + ' ' + ${bookAuthor.lastName} + ${iter.last ? '' : ', '}"
+							></span>
+						</td>
+					</tr>
+				</table>
 			</div>
-			<div>Favorites: <span th:text="${book.favoredAmount}"></span></div>
-			<div><a th:href="@{/books/details?id={id}(id=${book.id})}">details</a></div>
-			<div><button>Add to favorites</button></div>
+			<div><label th:text="#{popular.favorites} + ': ' + ${book.favoredAmount}"></label></div>
+			<div><a th:href="@{/books/details?id={id}(id=${book.id})}" th:text="#{books.book.details}"></a></div>
 		</div>
 	</div>
 </body>

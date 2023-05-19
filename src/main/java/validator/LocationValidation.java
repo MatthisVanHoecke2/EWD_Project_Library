@@ -26,10 +26,10 @@ public class LocationValidation implements Validator{
 	private void validatePlacecode(String value, String placecode, Errors errors) {
 		try {
 			int code = Integer.parseInt(value);
-			if(code < 50 || code > 300) errors.rejectValue(placecode, "doubleRange.location." + placecode, "must be between 49 and 301");
+			if(code < 50 || code > 300) errors.rejectValue(placecode, "location.codes.inRange.message", "must be between 49 and 301");
 		}
 		catch(NumberFormatException ex) {
-			errors.rejectValue(placecode, "valueType.location." + placecode, "must be a numeric value");
+			errors.rejectValue(placecode, "numeric.valueType", "must be a numeric value");
 		}
 	}
 

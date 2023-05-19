@@ -21,8 +21,10 @@ public class SecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().and().authorizeHttpRequests(requests -> requests.requestMatchers("/login**").permitAll()
 				.requestMatchers("/css/**").permitAll()
+				.requestMatchers("/rest/**").permitAll()
 				.requestMatchers("/*").hasRole("USER")
 				.requestMatchers("/books/popular").hasRole("USER")
+				.requestMatchers("/books/details").hasRole("USER")
 				.requestMatchers("/**").hasRole("ADMIN")
 				)
 			.formLogin(form -> form
